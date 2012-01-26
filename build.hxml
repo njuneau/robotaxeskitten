@@ -1,0 +1,3 @@
+-cp src
+-js out/robotaxeskitten.js
+-main RobotAxesKitten
