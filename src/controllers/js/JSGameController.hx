@@ -15,7 +15,7 @@ import js.Dom;
  * This is the JavaScript-based game controller.
  */
 #if js
-  @:native("controllers_hx.js")
+  @:native("controller_hx.js.JSGameController")
 #end
 class JSGameController {
     private static var BOARD_WIDTH : Int = 40;
