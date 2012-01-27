@@ -1,6 +1,6 @@
 package ;
 
-import models.Board;
+import controllers.js.JSGameController;
 
 /**
  * Robot Axes Kitten is a HaXe implementation of the RobotFindsKitten software
@@ -9,14 +9,15 @@ import models.Board;
 class RobotAxesKitten {
 
     public static var INSTANCE : RobotAxesKitten;
-    public static var BOARD_WIDTH : Int = 60;
-    public static var BOARD_HEIGHT : Int = 60;
+    private var gameController : JSGameController;
 
     /**
      * Creates a new game of RobotFindsKitten!
      */
     public function new() {
-        var board : Board = new Board(BOARD_WIDTH, BOARD_HEIGHT);
+        // Create the game and start it.
+        this.gameController = new JSGameController();
+        this.gameController.start();
     }
 
     /**

@@ -40,7 +40,7 @@ class Board {
                 }
 
                 // Place the kitten
-                if(j == this.robotPosition.getX() && i == this.robotPosition.getY()) {
+                if(j == this.kittenPosition.getX() && i == this.kittenPosition.getY()) {
                     tile.setEntity(new Kitten("+"));
                 }
 
@@ -57,6 +57,20 @@ class Board {
             this.tiles.push(row);
             i++;
         }
+    }
+
+    /**
+     * Returns the board's tiles
+     */
+    public function getTiles() : Array<Array<Tile>> {
+        return this.tiles;
+    }
+
+    /**
+     * Return a tile at a specific position
+     */
+    public function getTileAt(x : Int, y : Int) : Tile {
+        return this.tiles[x][y];
     }
 
 }
