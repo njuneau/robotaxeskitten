@@ -1,6 +1,6 @@
 package ;
 
-import controller.js.JSGameController;
+import controllers.js.JSGameController;
 
 /**
  * Robot Axes Kitten is a HaXe implementation of the RobotFindsKitten software

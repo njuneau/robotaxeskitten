@@ -16,7 +16,7 @@ class Board {
      * (there will be width*height tiles). The robot an kitten will both be
      * placed on a board at random positions.
      */
-    public function new(width : Int, height : Int) {
+    public function new(width : Int, height : Int, entityFactory : EntityFactory) {
 
         // Determine the robot and the kitten's position
         this.robotPosition = new Position(Std.random(width - 1), Std.random(height - 1));
@@ -42,7 +42,7 @@ class Board {
 
                 // Place the kitten
                 if(j == this.kittenPosition.getX() && i == this.kittenPosition.getY()) {
-                    tile.setEntity(new Kitten("+"));
+                    tile.setEntity(entityFactory.createKitten());
                 }
 
                 // Place an entity randomly (TBD)

@@ -5,13 +5,14 @@ package models;
  */
 class Robot extends Entity {
 
-    public static var REPRESENTATION = "#";
+    public static var REPRESENTATION : String = "#";
+    public static var COLOR : Array<Int> = [200, 200, 200];
 
     /**
      * Creates the mighty robot
      */
     public function new() {
-        super("#");
+        super("#", COLOR);
     }
 
 }

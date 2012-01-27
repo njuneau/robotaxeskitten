@@ -11,8 +11,8 @@ class Thing extends Entity {
     /**
      * Creates a new "thing" with its own representation and description
      */
-    public function new(representation : String, description : String) {
-        super(representation);
+    public function new(representation : String, color : Array<Int>, description : String) {
+        super(representation, color);
         this.description = description;
     }
 

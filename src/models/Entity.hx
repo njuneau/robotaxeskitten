@@ -7,12 +7,14 @@ package models;
 class Entity {
 
     private var representation : String;
+    private var color : Array<Int>;
 
     /**
-     * Creates a new entity with a given representation
+     * Creates a new entity with a given representation and an RGB color
      */
-    public function new(representation : String) {
+    public function new(representation : String, color : Array<Int>) {
         this.representation = representation;
+        this.color = color;
     }
 
     /**
@@ -20,6 +22,13 @@ class Entity {
      */
     public function getRepresentation() : String {
         return this.representation;
+    }
+
+    /**
+     * Returns the entity's color
+     */
+    public function getColor() : Array<Int> {
+        return this.color;
     }
 
 }

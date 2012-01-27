@@ -44,6 +44,14 @@ class HTMLTableView {
                 // If there is a entity in the tile, insert its representation
                 if(!cell.isEmpty()) {
                     var spanNode : HtmlDom = Lib.document.createElement("span");
+                    var color : Array<Int> = cell.getEntity().getColor();
+                    var styleString : StringBuf = new StringBuf();
+                    styleString.add("color:#");
+                    for(component in color) {
+                        styleString.add(StringTools.hex(component));
+                    }
+                    styleString.add(";");
+                    spanNode.setAttribute("style", styleString.toString());
                     var textNode : HtmlDom = Lib.document.createTextNode(cell.getEntity().getRepresentation());
                     spanNode.appendChild(textNode);
                     td.appendChild(spanNode);
@@ -88,6 +96,14 @@ class HTMLTableView {
             if(!tiles[y][x].isEmpty()) {
                 var spanNode : HtmlDom = Lib.document.createElement("span");
                 var textNode : HtmlDom = Lib.document.createTextNode(tiles[y][x].getEntity().getRepresentation());
+                var color : Array<Int> = tiles[y][x].getEntity().getColor();
+                var styleString : StringBuf = new StringBuf();
+                styleString.add("color:#");
+                for(component in color) {
+                    styleString.add(StringTools.hex(component));
+                }
+                styleString.add(";");
+                spanNode.setAttribute("style", styleString.toString());
                 spanNode.appendChild(textNode);
                 this.cells[y][x].appendChild(spanNode);
             }

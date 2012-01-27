@@ -1,10 +1,11 @@
-package controller.js;
+package controllers.js;
 
 import models.Board;
 import models.Position;
 import models.Tile;
 import models.Thing;
 import models.Kitten;
+import models.DefaultEntityFactory;
 
 import views.js.HTMLTableView;
 import js.Lib;
@@ -13,6 +14,9 @@ import js.Dom;
 /**
  * This is the JavaScript-based game controller.
  */
+#if js
+  @:native("controllers_hx.js")
+#end
 class JSGameController {
     private static var BOARD_WIDTH : Int = 40;
     private static var BOARD_HEIGHT : Int = 40;
@@ -30,7 +34,7 @@ class JSGameController {
      * Creates a new game of robotfindskitten controlled by JavaScript
      */
     public function new() {
-        this.board = new Board(BOARD_WIDTH, BOARD_HEIGHT);
+        this.board = new Board(BOARD_WIDTH, BOARD_HEIGHT, new DefaultEntityFactory());
         this.robotPosition = this.board.getRobotPosition();
     }
 

@@ -6,9 +6,9 @@ package models;
 class Kitten extends Entity {
 
     /**
-     * Creates the kitten with a given representation
+     * Creates the kitten with a given representation and RGB color
      */
-    public function new(representation : String) {
-        super(representation);
+    public function new(representation : String, color : Array<Int>) {
+        super(representation, color);
     }
 }
