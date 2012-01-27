@@ -1,6 +1,7 @@
 package views.js;
 
 import models.Board;
+import models.Entity;
 import models.Position;
 import models.Tile;
 import js.Dom;
@@ -38,23 +39,12 @@ class HTMLTableView {
         for(row in tiles) {
             var rowArr : Array<HtmlDom> = new Array<HtmlDom>();
             var tr : HtmlDom = Lib.document.createElement("tr");
-            for(cell in row) {
+            for(tile in row) {
                 var td : HtmlDom = Lib.document.createElement("td");
 
                 // If there is a entity in the tile, insert its representation
-                if(!cell.isEmpty()) {
-                    var spanNode : HtmlDom = Lib.document.createElement("span");
-                    var color : Array<Int> = cell.getEntity().getColor();
-                    var styleString : StringBuf = new StringBuf();
-                    styleString.add("color:#");
-                    for(component in color) {
-                        styleString.add(StringTools.hex(component));
-                    }
-                    styleString.add(";");
-                    spanNode.setAttribute("style", styleString.toString());
-                    var textNode : HtmlDom = Lib.document.createTextNode(cell.getEntity().getRepresentation());
-                    spanNode.appendChild(textNode);
-                    td.appendChild(spanNode);
+                if(!tile.isEmpty()) {
+                    this.drawCell(td, tile.getEntity());
                 }
 
                 tr.appendChild(td);
@@ -94,21 +84,33 @@ class HTMLTableView {
         if(x >= 0 && x < this.cells[0].length && y >= 0 && y < cells.length) {
             var tiles : Array<Array<Tile>> = this.board.getTiles();
             if(!tiles[y][x].isEmpty()) {
-                var spanNode : HtmlDom = Lib.document.createElement("span");
-                var textNode : HtmlDom = Lib.document.createTextNode(tiles[y][x].getEntity().getRepresentation());
-                var color : Array<Int> = tiles[y][x].getEntity().getColor();
-                var styleString : StringBuf = new StringBuf();
-                styleString.add("color:#");
-                for(component in color) {
-                    styleString.add(StringTools.hex(component));
-                }
-                styleString.add(";");
-                spanNode.setAttribute("style", styleString.toString());
-                spanNode.appendChild(textNode);
-                this.cells[y][x].appendChild(spanNode);
+                this.drawCell(this.cells[y][x], tiles[y][x].getEntity());
             }
 
         }
+    }
+
+    /**
+     * Draws a single table cell in the game board - specify the cell and the
+     * entity to draw in it.
+     */
+    private function drawCell(cell : HtmlDom, entity : Entity) : Void {
+        var spanNode : HtmlDom = Lib.document.createElement("span");
+        var textNode : HtmlDom = Lib.document.createTextNode(entity.getRepresentation());
+        var color : Array<Int> = entity.getColor();
+        var styleString : StringBuf = new StringBuf();
+        styleString.add("color:#");
+        for(component in color) {
+            var cmp : String = StringTools.hex(component);
+            styleString.add(cmp);
+            if(cmp.length == 1) {
+                styleString.add("0");
+            }
+        }
+        styleString.add(";");
+        spanNode.setAttribute("style", styleString.toString());
+        spanNode.appendChild(textNode);
+        cell.appendChild(spanNode);
     }
 
 }

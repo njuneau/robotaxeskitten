@@ -34,7 +34,7 @@ class JSGameController {
      * Creates a new game of robotfindskitten controlled by JavaScript
      */
     public function new() {
-        this.board = new Board(BOARD_WIDTH, BOARD_HEIGHT, new DefaultEntityFactory());
+        this.board = new Board(BOARD_WIDTH, BOARD_HEIGHT, new DefaultEntityFactory(BOARD_WIDTH * 3));
         this.robotPosition = this.board.getRobotPosition();
     }
 

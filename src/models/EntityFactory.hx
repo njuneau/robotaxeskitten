@@ -16,4 +16,9 @@ interface EntityFactory {
      */
     public function createThing() : Thing;
 
+    /**
+     * Randomly create a thing - it may return a thing or not.
+     */
+    public function createRandomThing() : Thing;
+
 }

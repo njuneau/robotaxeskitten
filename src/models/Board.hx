@@ -38,15 +38,12 @@ class Board {
                 // Place the robot
                 if(j == this.robotPosition.getX() && i == this.robotPosition.getY()) {
                     tile.setEntity(new Robot());
-                }
-
-                // Place the kitten
-                if(j == this.kittenPosition.getX() && i == this.kittenPosition.getY()) {
+                } else if(j == this.kittenPosition.getX() && i == this.kittenPosition.getY()) {
+                    // Place the kitten
                     tile.setEntity(entityFactory.createKitten());
-                }
-
-                // Place an entity randomly (TBD)
-                if(!tile.isEmpty()) {
+                } else {
+                    // Place an entity randomly (TBD)
+                    tile.setEntity(entityFactory.createRandomThing());
                 }
 
                 // Add the tile
