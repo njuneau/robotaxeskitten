@@ -3,6 +3,7 @@ package models;
 /**
  * This is a virtual representation of the playing board - it's only a MxN grid
  * which can holds entities (a kitten, for example) and the player.
+ * Board coordinates ranges from 0 to given dimensions - 1.
  */
 class Board {
 
@@ -31,7 +32,7 @@ class Board {
         while(i < height) {
             var j : Int = 0;
             var row : Array<Tile> = new Array<Tile>();
-            while(j < height) {
+            while(j < width) {
                 var tile : Tile = new Tile();
 
                 // Place the robot
@@ -67,10 +68,51 @@ class Board {
     }
 
     /**
-     * Return a tile at a specific position
+     * Return a tile at a specific position. Returns null if element doesn't
+     * exist.
      */
-    public function getTileAt(x : Int, y : Int) : Tile {
-        return this.tiles[x][y];
+    public function getTileAt(position : Position) : Tile {
+        var x : Int = position.getX();
+        var y : Int = position.getY();
+        var returnedTile : Tile = null;
+
+        // Make sure we refer to valid indexes by checking the bounds
+        if(x >= 0 && x < this.tiles[0].length && y >= 0 && y < this.tiles.length) {
+            returnedTile = this.tiles[position.getY()][position.getX()];
+        }
+
+        return returnedTile;
+    }
+
+    /**
+     * Moves the robot in a certain direction by a certain X and Y increment.
+     * If the robot hits an obstacle (like an edge or entity), the robot's
+     * position will not be changed.
+     */
+    public function moveRobot(xIncrement : Int, yIncrement : Int) : Void {
+        var newPosition = new Position(this.robotPosition.getX() + xIncrement, this.robotPosition.getY() + yIncrement);
+        if(newPosition.getX() >= 0 &&
+                newPosition.getX() < this.tiles[0].length &&
+                newPosition.getY() >= 0 &&
+                newPosition.getY() < this.tiles.length &&
+                this.getTileAt(newPosition).isEmpty()) {
+
+            // Get robot out of the tile
+            var oldTile : Tile = this.getTileAt(this.robotPosition);
+            var robot : Entity = oldTile.getEntity();
+            oldTile.removeEntity();
+
+            // Put robot in the new tile
+            this.robotPosition = newPosition;
+            this.getTileAt(this.robotPosition).setEntity(robot);
+        }
+    }
+
+    /**
+     * Returns a copy of the position of the robot.
+     */
+    public function getRobotPosition() : Position {
+        return new Position(this.robotPosition.getX(), this.robotPosition.getY());
     }
 
 }

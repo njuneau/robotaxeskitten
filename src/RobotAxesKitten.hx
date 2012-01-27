@@ -1,6 +1,6 @@
 package ;
 
-import controllers.js.JSGameController;
+import controller.js.JSGameController;
 
 /**
  * Robot Axes Kitten is a HaXe implementation of the RobotFindsKitten software
@@ -9,6 +9,7 @@ import controllers.js.JSGameController;
 class RobotAxesKitten {
 
     public static var INSTANCE : RobotAxesKitten;
+
     private var gameController : JSGameController;
 
     /**
@@ -24,7 +25,7 @@ class RobotAxesKitten {
      * Program entry point
      */
     public static function main() {
-        INSTANCE = new RobotAxesKitten();
+        RobotAxesKitten.INSTANCE = new RobotAxesKitten();
     }
 
 }

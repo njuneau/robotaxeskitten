@@ -1,6 +1,7 @@
 package views.js;
 
 import models.Board;
+import models.Position;
 import models.Tile;
 import js.Dom;
 import js.Lib;
@@ -46,17 +47,52 @@ class HTMLTableView {
                     var textNode : HtmlDom = Lib.document.createTextNode(cell.getEntity().getRepresentation());
                     spanNode.appendChild(textNode);
                     td.appendChild(spanNode);
-                    rowArr.push(td);
                 }
 
                 tr.appendChild(td);
-                this.cells.push(rowArr);
+                rowArr.push(td);
             }
+
             this.table.appendChild(tr);
+            this.cells.push(rowArr);
+
         }
 
         // Add table to the container
         containerElement.appendChild(this.table);
+    }
+
+    /**
+     * Clears the cell at the given position
+     */
+    public function clearCellAt(position : Position) : Void {
+        var x : Int = position.getX();
+        var y : Int = position.getY();
+
+        // Clear the cell
+        if(x >= 0 && x < this.cells[0].length && y >= 0 && y < cells.length) {
+            this.cells[y][x].removeChild(this.cells[y][x].childNodes[0]);
+        }
+    }
+
+    /**
+     * Draws the cell at a specific position
+     */
+    public function drawCellAt(position : Position) : Void {
+        var x : Int = position.getX();
+        var y : Int = position.getY();
+
+        // Redraw the cell
+        if(x >= 0 && x < this.cells[0].length && y >= 0 && y < cells.length) {
+            var tiles : Array<Array<Tile>> = this.board.getTiles();
+            if(!tiles[y][x].isEmpty()) {
+                var spanNode : HtmlDom = Lib.document.createElement("span");
+                var textNode : HtmlDom = Lib.document.createTextNode(tiles[y][x].getEntity().getRepresentation());
+                spanNode.appendChild(textNode);
+                this.cells[y][x].appendChild(spanNode);
+            }
+
+        }
     }
 
 }
