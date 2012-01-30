@@ -3,7 +3,7 @@ package controllers.js;
 import models.Board;
 import models.Position;
 import models.Tile;
-import models.Thing;
+import models.NKI;
 import models.Kitten;
 import models.DefaultEntityFactory;
 
@@ -50,12 +50,13 @@ class JSGameController {
     }
 
     /**
-     * Initialises the game (called by start after onLead event)
+     * Initialises the game (called by start after onLoad event)
      */
     private function init() {
         // Render talbe in body
         this.view = new HTMLTableView(board);
         this.view.render(Lib.document.getElementsByTagName("body")[0]);
+        this.view.showMessage(String.fromCharCode(160));
         var self : JSGameController = this;
 
         // Add keypress events
@@ -113,12 +114,12 @@ class JSGameController {
             var tentative : Position = new Position(newPosition.getX() + xIncrement, newPosition.getY() + yIncrement);
             var tile : Tile = this.board.getTileAt(tentative);
             // If we haven't hit the borders and that there is an object on the
-            // tile, try to determine what it is. A kitten or a thing?
+            // tile, try to determine what it is. A kitten or a NKI?
             if(tile != null) {
                 if(!tile.isEmpty()) {
                     switch(Type.getClass(tile.getEntity())) {
-                        case Thing:
-                            this.view.showMessage((cast(tile.getEntity(), Thing).getDescription()));
+                        case NKI:
+                            this.view.showMessage((cast(tile.getEntity(), NKI).getDescription()));
                         case Kitten:
                             this.view.showMessage("Found kitten!");
                     }

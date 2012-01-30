@@ -1,10 +1,10 @@
 package models;
 
 /**
- * A "thing" is a non-kitten entity. It also contains a description, so the
- * robot knows what he's touching
+ * A Non-Kitten Item. It contains a description, so the robot knows what he's
+ *touching.
  */
-class Thing extends Entity {
+class NKI extends Entity {
 
     private var description : String;
 

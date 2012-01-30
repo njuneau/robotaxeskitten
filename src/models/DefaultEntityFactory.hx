@@ -1,16 +1,17 @@
 package models;
 
+import haxe.Resource;
+
 /**
  * This factory is used to build entities of different kind
  */
 class DefaultEntityFactory implements EntityFactory {
 
-    private static var DESCRIPTIONS : Array<String> = [
-        "Not a kitten",
-        "A pack of gum"
-    ];
+    private static var DESCRIPITIONS_RESOURCES : String = "nkis";
+    private static var COMMENT_CHAR = "#";
 
     private var randomMax : Int;
+    private var descriptions : Array<String>;
 
     /**
      * Creates the default factory. To create random thing, this factory chooses
@@ -19,6 +20,17 @@ class DefaultEntityFactory implements EntityFactory {
      */
     public function new(randomMax : Int) {
         this.randomMax = randomMax;
+
+        this.descriptions = new Array<String>();
+        var descriptions : Array<String> = Resource.getString(DESCRIPITIONS_RESOURCES).split("\n");
+
+        // Clean comments and descriptions
+        for(desc in descriptions) {
+            var desc : String = StringTools.ltrim(desc);
+            if(desc.charAt(0) != COMMENT_CHAR) {
+                this.descriptions.push(desc);
+            }
+        }
     }
 
     /**
@@ -31,26 +43,26 @@ class DefaultEntityFactory implements EntityFactory {
     }
 
     /**
-     * Creates a new thing
+     * Creates a new non-kitten item
      */
-    public function createThing() : Thing {
-        var representation : String = String.fromCharCode(33 + Std.random(93));
-        var color : Array<Int> = this.toRGB(Std.random(360));
-        var description : String = DESCRIPTIONS[Std.random(DESCRIPTIONS.length)];
-        return new Thing(representation, color, description);
+    public function createNKI() : NKI {
+        var representation : String = String.fromCharCode(33 + Std.random(94));
+        var color : Array<Int> = this.toRGB(Std.random(361));
+        var description : String = this.descriptions[Std.random(this.descriptions.length)];
+        return new NKI(representation, color, description);
     }
 
     /**
      * Randomly create a thing - it may return a thing or not (by returning null)
      */
-    public function createRandomThing() : Thing {
-        var thing : Thing = null;
+    public function createRandomNKI() : NKI {
+        var nki : NKI = null;
         var one : Int = Std.random(Math.floor(this.randomMax));
         var two : Int = Std.random(Math.floor(this.randomMax));
         if(one == two) {
-            thing = this.createThing();
+            nki = this.createNKI();
         }
-        return thing;
+        return nki;
     }
 
     /**

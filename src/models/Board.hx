@@ -43,7 +43,7 @@ class Board {
                     tile.setEntity(entityFactory.createKitten());
                 } else {
                     // Place an entity randomly (TBD)
-                    tile.setEntity(entityFactory.createRandomThing());
+                    tile.setEntity(entityFactory.createRandomNKI());
                 }
 
                 // Add the tile

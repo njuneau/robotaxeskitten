@@ -12,13 +12,13 @@ interface EntityFactory {
     public function createKitten() : Kitten;
 
     /**
-     * Creates a thing
+     * Creates a NKI
      */
-    public function createThing() : Thing;
+    public function createNKI() : NKI;
 
     /**
-     * Randomly create a thing - it may return a thing or not.
+     * Randomly create a NKI - it may return a NKI or not.
      */
-    public function createRandomThing() : Thing;
+    public function createRandomNKI() : NKI;
 
 }
