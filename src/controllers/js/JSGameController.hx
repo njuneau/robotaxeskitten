@@ -118,9 +118,9 @@ class JSGameController {
                 if(!tile.isEmpty()) {
                     switch(Type.getClass(tile.getEntity())) {
                         case Thing:
-                            trace(cast(tile.getEntity(), Thing).getDescription());
+                            this.view.showMessage((cast(tile.getEntity(), Thing).getDescription()));
                         case Kitten:
-                            trace("Found kitten!");
+                            this.view.showMessage("Found kitten!");
                     }
                 }
             }

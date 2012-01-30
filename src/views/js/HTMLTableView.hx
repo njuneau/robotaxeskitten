@@ -13,8 +13,10 @@ import js.Lib;
 class HTMLTableView {
 
     private static var TABLE_ID = "gameBoard";
+    private static var MESSAGE_ID = "gameMessage";
 
     private var board : Board;
+    private var messageArea : HtmlDom;
     private var table : HtmlDom;
     private var cells : Array<Array<HtmlDom>>;
 
@@ -30,7 +32,11 @@ class HTMLTableView {
      */
     public function render(containerElement : HtmlDom) {
         this.table = Lib.document.createElement("table");
+        this.messageArea = Lib.document.createElement("p");
+
+        this.messageArea.setAttribute("id", MESSAGE_ID);
         this.table.setAttribute("id", TABLE_ID);
+
         this.cells = new Array<Array<HtmlDom>>();
 
         var tiles : Array<Array<Tile>> = this.board.getTiles();
@@ -57,6 +63,7 @@ class HTMLTableView {
         }
 
         // Add table to the container
+        containerElement.appendChild(this.messageArea);
         containerElement.appendChild(this.table);
     }
 
@@ -88,6 +95,17 @@ class HTMLTableView {
             }
 
         }
+    }
+
+    /**
+     * Shows a message in the message display area. It will clear automatically
+     * all other messages.
+     */
+    public function showMessage(message : String) : Void {
+        while(this.messageArea.childNodes.length > 0) {
+            this.messageArea.removeChild(this.messageArea.childNodes[0]);
+        }
+        this.messageArea.appendChild(Lib.document.createTextNode(message));
     }
 
     /**
