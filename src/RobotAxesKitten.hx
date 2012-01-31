@@ -8,7 +8,8 @@ import controllers.js.JSGameController;
  */
 class RobotAxesKitten {
 
-    public static var INSTANCE : RobotAxesKitten;
+    private static var INSTANCE : RobotAxesKitten;
+    private static var GAME_ZONE_ID : String = "gameZone";
 
     private var gameController : JSGameController;
 
@@ -17,8 +18,8 @@ class RobotAxesKitten {
      */
     public function new() {
         // Create the game and start it.
-        this.gameController = new JSGameController();
-        this.gameController.start();
+        this.gameController = new JSGameController(GAME_ZONE_ID);
+        this.gameController.init();
     }
 
     /**

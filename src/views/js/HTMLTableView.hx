@@ -6,6 +6,7 @@ import models.Position;
 import models.Tile;
 import js.Dom;
 import js.Lib;
+import haxe.Timer;
 
 /**
  *  This view is to be used with Javascript-based controllers
@@ -14,23 +15,24 @@ class HTMLTableView {
 
     private static var TABLE_ID = "gameBoard";
     private static var MESSAGE_ID = "gameMessage";
+    private static var WIN_TABLE_ID = "winBoard";
+    private static var ENDING_APPROACH_SPEED = 1000;
 
     private var board : Board;
     private var messageArea : HtmlDom;
     private var table : HtmlDom;
+    private var containerElement : HtmlDom;
     private var cells : Array<Array<HtmlDom>>;
+    private var endingApproachTimer : Timer;
 
     /**
-     * Creates a new HTML table view
+     * Creates a new HTML table view. Specify the model board to render
+     * and an HTML element to put the message and board in.
      */
-    public function new(board : Board) {
+    public function new(board : Board, containerElement : HtmlDom) {
         this.board = board;
-    }
+        this.containerElement = containerElement;
 
-    /**
-     * Renders the table view in the given element
-     */
-    public function render(containerElement : HtmlDom) {
         this.table = Lib.document.createElement("table");
         this.messageArea = Lib.document.createElement("p");
 
@@ -59,12 +61,38 @@ class HTMLTableView {
 
             this.table.appendChild(tr);
             this.cells.push(rowArr);
+        }
+    }
 
+    /**
+     * Shows the welcome message
+     */
+    public function showWelcome() : Void {
+        this.containerElement.appendChild(this.messageArea);
+        var welcome : String = "By the illustrious Leonard Richardson (C) 1997, 2000\nWritten originally for the Nerth Pork robotfindskitten contest\n\nIn this game, you are robot (#). Your job is to find kitten. This task\nis complicated by the existence of various things which are not kitten.\nRobot must touch items to determine if they are kitten or not. The game\nends when robotfindskitten.\n\nPress any key to start.";
+
+        for(line in welcome.split("\n")) {
+            this.messageArea.appendChild(Lib.document.createTextNode(line));
+            this.messageArea.appendChild(Lib.document.createElement("br"));
+        }
+    }
+
+    /**
+     * Renders the table view in the given element
+     */
+    public function showGameBoard() {
+        // Add table to the container
+        this.containerElement.appendChild(this.table);
+    }
+
+    /**
+     * Clear all elements from the page
+     */
+    public function clear() : Void {
+        while(this.containerElement.childNodes.length > 0) {
+            this.containerElement.removeChild(this.containerElement.childNodes[0]);
         }
 
-        // Add table to the container
-        containerElement.appendChild(this.messageArea);
-        containerElement.appendChild(this.table);
     }
 
     /**
@@ -109,13 +137,90 @@ class HTMLTableView {
     }
 
     /**
+     * Shows the ending sequence. Provide the robot's position, the kitten's
+     * position and a function callback that will be called after the ending
+     * sequence
+     */
+    public function showEnding(robotPosition : Position, kittenPosition : Position, callBack : Dynamic) : Void {
+        // Clear messages
+        this.showMessage("");
+
+        // Create ending sequence elements
+        var robotSpan : HtmlDom = Lib.document.createElement("span");
+        var kittenSpan : HtmlDom = Lib.document.createElement("span");
+        var spaceSpan : HtmlDom = Lib.document.createElement("span");
+
+        var robot : Entity = this.board.getTileAt(robotPosition).getEntity();
+        var kitten : Entity = this.board.getTileAt(kittenPosition).getEntity();
+
+        // Set color of the robot
+        robotSpan.setAttribute("style", this.getColorStyle(robot.getColor()));
+        robotSpan.appendChild(Lib.document.createTextNode(robot.getRepresentation()));
+
+        // Set color of the kitten
+        kittenSpan.setAttribute("style", this.getColorStyle(kitten.getColor()));
+        kittenSpan.appendChild(Lib.document.createTextNode(kitten.getRepresentation()));
+
+        // 3 unbreakable spaces
+        var spaceText : String = String.fromCharCode(160) + String.fromCharCode(160) + String.fromCharCode(160);
+        spaceSpan.appendChild(Lib.document.createTextNode(spaceText));
+
+        // Append all the spans
+        this.messageArea.appendChild(robotSpan);
+        this.messageArea.appendChild(spaceSpan);
+        this.messageArea.appendChild(kittenSpan);
+
+        var self : HTMLTableView = this;
+        this.endingApproachTimer = new Timer(ENDING_APPROACH_SPEED);
+        this.endingApproachTimer.run = function() : Void {
+            var chunks : Array<String>;
+            chunks = spaceSpan.childNodes[0].nodeValue.split(String.fromCharCode(160));
+            if(chunks.length > 1) {
+                // Remove one space from the robot and kitten until they reach
+                // other
+                chunks.splice(chunks.length - 1, 1);
+                spaceSpan.removeChild(spaceSpan.childNodes[0]);
+                var newSpaces : StringBuf = new StringBuf();
+                var i : Int = 0;
+                while(i < chunks.length - 1) {
+                    newSpaces.add(String.fromCharCode(160));
+                    i++;
+                }
+                spaceSpan.appendChild(Lib.document.createTextNode(newSpaces.toString()));
+            } else {
+                // Robot and kitten are together now - clear everything out
+                self.finishEnding();
+                callBack();
+            }
+        }
+
+    }
+
+    /**
+     * Finishes the ending sequence
+     */
+    private function finishEnding() {
+        this.endingApproachTimer.stop();
+        this.showMessage("You found kitten! Way to go, robot!");
+    }
+
+
+    /**
      * Draws a single table cell in the game board - specify the cell and the
      * entity to draw in it.
      */
     private function drawCell(cell : HtmlDom, entity : Entity) : Void {
         var spanNode : HtmlDom = Lib.document.createElement("span");
         var textNode : HtmlDom = Lib.document.createTextNode(entity.getRepresentation());
-        var color : Array<Int> = entity.getColor();
+        spanNode.setAttribute("style", this.getColorStyle(entity.getColor()));
+        spanNode.appendChild(textNode);
+        cell.appendChild(spanNode);
+    }
+
+    /**
+     * Returns a CSS color property containing the specified RGB values
+     */
+    private function getColorStyle(color : Array<Int>) : String {
         var styleString : StringBuf = new StringBuf();
         styleString.add("color:#");
         for(component in color) {
@@ -126,9 +231,7 @@ class HTMLTableView {
             }
         }
         styleString.add(";");
-        spanNode.setAttribute("style", styleString.toString());
-        spanNode.appendChild(textNode);
-        cell.appendChild(spanNode);
+        return styleString.toString();
     }
 
 }

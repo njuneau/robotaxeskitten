@@ -26,37 +26,67 @@ class JSGameController {
     private static var KEY_DOWN : Int = 40;
     private static var KEY_RIGHT : Int = 39;
 
+    private var gameZoneID : String;
     private var board : Board;
     private var view : HTMLTableView;
     private var robotPosition : Position;
+    private var playedOnce : Bool;
+
 
     /**
      * Creates a new game of robotfindskitten controlled by JavaScript
      */
-    public function new() {
-        this.board = new Board(BOARD_WIDTH, BOARD_HEIGHT, new DefaultEntityFactory(BOARD_WIDTH * 3));
-        this.robotPosition = this.board.getRobotPosition();
+    public function new(gameZoneID : String) {
+        this.gameZoneID = gameZoneID;
+        this.playedOnce = false;
     }
 
     /**
-     * Starts the game
+     * Initialises the game, putting the board in the specified game zone (
+     * an HTML element ID)
      */
-    public function start() : Void {
+    public function init() : Void {
         var self : JSGameController = this;
         // On window load, start the game
         Lib.window.onload = function(event : Event) : Void {
-            self.init();
+            self.start();
         };
     }
 
     /**
      * Initialises the game (called by start after onLoad event)
      */
-    private function init() {
-        // Render talbe in body
-        this.view = new HTMLTableView(board);
-        this.view.render(Lib.document.getElementsByTagName("body")[0]);
+    private function start() {
+        // Create a new board
+        this.board = new Board(BOARD_WIDTH, BOARD_HEIGHT, new DefaultEntityFactory(BOARD_WIDTH * 3));
+        this.robotPosition = this.board.getRobotPosition();
+
+        // Render table in body
+        this.view = new HTMLTableView(this.board, Lib.document.getElementById(this.gameZoneID));
+
+        if(!this.playedOnce) {
+            this.view.showWelcome();
+
+            var self : JSGameController = this;
+            // Add keypress event
+            Lib.document.onkeypress = function(event : Event) : Void {
+                self.showGameBoard();
+                event.stopPropagation();
+            }
+        } else {
+            this.view.showWelcome();
+            this.showGameBoard();
+        }
+
+    }
+
+    /**
+     * Make the game board show up and put the key events in place
+     */
+    private function showGameBoard() : Void {
         this.view.showMessage(String.fromCharCode(160));
+        this.view.showGameBoard();
+
         var self : JSGameController = this;
 
         // Add keypress events
@@ -74,6 +104,7 @@ class JSGameController {
             event.stopPropagation();
         }
     }
+
     /**
      * Move the robot up
      */
@@ -121,7 +152,13 @@ class JSGameController {
                         case NKI:
                             this.view.showMessage((cast(tile.getEntity(), NKI).getDescription()));
                         case Kitten:
-                            this.view.showMessage("Found kitten!");
+                            // Found kitten! Game over!
+                            Lib.document.onkeypress = function(event : Event) : Void {};
+
+                            var self : JSGameController = this;
+                            this.view.showEnding(newPosition, tentative, function() : Void {
+                                self.endGame();
+                            });
                     }
                 }
             }
@@ -130,6 +167,21 @@ class JSGameController {
             this.view.clearCellAt(this.robotPosition);
             this.robotPosition = newPosition;
             this.view.drawCellAt(this.robotPosition);
+        }
+    }
+
+    /**
+     * Ends the game
+     */
+    private function endGame() : Void {
+        var self : JSGameController = this;
+        this.playedOnce = true;
+
+        // restart the game at key stroke
+        Lib.document.onkeypress = function(event : Event) : Void {
+            self.view.clear();
+            self.start();
+            event.stopPropagation();
         }
     }
 
