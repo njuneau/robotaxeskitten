@@ -80,7 +80,7 @@ class HTMLTableView {
     /**
      * Renders the table view in the given element
      */
-    public function showGameBoard() {
+    public function showGameBoard() : Void {
         // Add table to the container
         this.containerElement.appendChild(this.table);
     }
@@ -172,6 +172,8 @@ class HTMLTableView {
 
         var self : HTMLTableView = this;
         this.endingApproachTimer = new Timer(ENDING_APPROACH_SPEED);
+
+        // Make thr robot and kitten reach each other
         this.endingApproachTimer.run = function() : Void {
             var chunks : Array<String>;
             chunks = spaceSpan.childNodes[0].nodeValue.split(String.fromCharCode(160));
@@ -189,19 +191,20 @@ class HTMLTableView {
                 spaceSpan.appendChild(Lib.document.createTextNode(newSpaces.toString()));
             } else {
                 // Robot and kitten are together now - clear everything out
-                self.finishEnding();
-                callBack();
+                self.finishEnding(callBack);
             }
         }
 
     }
 
     /**
-     * Finishes the ending sequence
+     * Finishes the ending sequence, calling the callBack function after it's
+     * done.
      */
-    private function finishEnding() {
+    private function finishEnding(callBack : Dynamic) {
         this.endingApproachTimer.stop();
         this.showMessage("You found kitten! Way to go, robot!");
+        callBack();
     }
 
 
@@ -219,6 +222,7 @@ class HTMLTableView {
 
     /**
      * Returns a CSS color property containing the specified RGB values
+     * Example output : color:#FFFFFF;
      */
     private function getColorStyle(color : Array<Int>) : String {
         var styleString : StringBuf = new StringBuf();

@@ -47,7 +47,7 @@ class DefaultEntityFactory implements EntityFactory {
      */
     public function createNKI() : NKI {
         var representation : String = String.fromCharCode(33 + Std.random(94));
-        var color : Array<Int> = this.toRGB(Std.random(361));
+        var color : Array<Int> = this.toRGB(Std.random(360));
         var description : String = this.descriptions[Std.random(this.descriptions.length)];
         return new NKI(representation, color, description);
     }
