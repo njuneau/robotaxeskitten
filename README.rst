@@ -5,21 +5,25 @@ Description
 -----------------
 
 This is a reimplementation of the very famous game "robotfindskitten" by
-Leonard Richardson. The goal of the game is pretty simple - you are a robot,
-and you must find kitten. But, as you must know, there are a lot of things in
-this world that are not kitten. Hence, you must touch the items on the screen to
+Leonard Richardson. The goal of the game is pretty simple - you are robot, and
+you must find kitten. But, as you must know, there are a lot of things in this
+world that are not kitten. Hence, robot must touch the items on the screen to
 know if it's kitten or not kitten.
 
 Robot Axes Kitten lets you play in the comfort of your browser. Use the arrow
 keys or the WASD keys to move robot.
 
+Please note, there are no actual kitten axing as the name could suggest. Robot
+is not in the axing business - only in kitten finding.
+
 Building robotaxeskitten
 -----------------
 
-You will need the HaXe compiler (http://haxe.org/) in order to compile the
-project. Once it is installed, open a terminal in the project's root folder and
-run "haxe build.hxml". This should generate the Javascript file. Once
-compilation is complete, open "html/index.html" to play the game.
+You will need the haXe compiler (http://haxe.org/) in order to compile the
+project. Once it is installed, open a terminal in the project's root folder.
+Create an "out" folder and run "haxe build.hxml". This should generate the
+Javascript file. Once compilation is complete, open "html/index.html" to play
+the game.
 
 Your very own robot toolbox!
 -----------------
@@ -35,3 +39,9 @@ Javascript implementation, the only sub-package is "js".
 
 Therefore, should you want to fine-tune your robot or make him find kitten in
 the Flash universe, look into the "controllers" and "views" packages.
+
+More RFK infos
+-----------------
+The robotfindskitten's website_.
+
+.. _website: http://robotfindskitten.org/
