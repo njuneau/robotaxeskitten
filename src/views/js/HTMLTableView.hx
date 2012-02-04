@@ -1,3 +1,22 @@
+// robotaxeskitten - A reimplementation of the original robotfindskitten by Leonard Richardson
+// Copyright (C) 2012  Nicolas Juneau
+// Full copyright notice can be found in the project root's "COPYRIGHT" file
+//
+// This file is part of robotaxeskitten.
+//
+// robotaxeskitten is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// robotaxeskitten is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with robotaxeskitten.  If not, see <http://www.gnu.org/licenses/>.
+
 package views.js;
 
 import models.Board;
@@ -173,7 +192,7 @@ class HTMLTableView {
         var self : HTMLTableView = this;
         this.endingApproachTimer = new Timer(ENDING_APPROACH_SPEED);
 
-        // Make thr robot and kitten reach each other
+        // Make the robot and kitten reach each other
         this.endingApproachTimer.run = function() : Void {
             var chunks : Array<String>;
             chunks = spaceSpan.childNodes[0].nodeValue.split(String.fromCharCode(160));

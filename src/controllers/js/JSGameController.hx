@@ -1,3 +1,22 @@
+// robotaxeskitten - A reimplementation of the original robotfindskitten by Leonard Richardson
+// Copyright (C) 2012  Nicolas Juneau
+// Full copyright notice can be found in the project root's "COPYRIGHT" file
+//
+// This file is part of robotaxeskitten.
+//
+// robotaxeskitten is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// robotaxeskitten is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with robotaxeskitten.  If not, see <http://www.gnu.org/licenses/>.
+
 package controllers.js;
 
 import models.Board;
@@ -25,6 +44,11 @@ class JSGameController {
     private static var KEY_LEFT : Int = 37;
     private static var KEY_DOWN : Int = 40;
     private static var KEY_RIGHT : Int = 39;
+
+    private static var KEY_W : Int = 87;
+    private static var KEY_A : Int = 65;
+    private static var KEY_S : Int = 83;
+    private static var KEY_D : Int = 68;
 
     private var gameZoneID : String;
     private var board : Board;
@@ -69,7 +93,7 @@ class JSGameController {
 
             var self : JSGameController = this;
             // Add keypress event
-            Lib.document.onkeypress = function(event : Event) : Void {
+            Lib.document.onkeydown = function(event : Event) : Void {
                 self.showGameBoard();
                 event.stopPropagation();
             }
@@ -88,17 +112,16 @@ class JSGameController {
         this.view.showGameBoard();
 
         var self : JSGameController = this;
-
         // Add keypress events
-        Lib.document.onkeypress = function(event : Event) : Void {
+        Lib.document.onkeydown = function(event : Event) : Void {
             switch(event.keyCode) {
-                case KEY_UP:
+                case KEY_UP, KEY_W:
                     self.moveUp();
-                case KEY_LEFT:
+                case KEY_LEFT, KEY_A:
                     self.moveLeft();
-                case KEY_DOWN:
+                case KEY_DOWN, KEY_S:
                     self.moveDown();
-                case KEY_RIGHT:
+                case KEY_RIGHT, KEY_D:
                     self.moveRight();
             }
             event.stopPropagation();
@@ -153,8 +176,7 @@ class JSGameController {
                             this.view.showMessage((cast(tile.getEntity(), NKI).getDescription()));
                         case Kitten:
                             // Found kitten! Game over!
-                            Lib.document.onkeypress = function(event : Event) : Void {};
-
+                            Lib.document.onkeydown = function(event : Event) : Void {};
                             var self : JSGameController = this;
                             this.view.showEnding(newPosition, tentative, function() : Void {
                                 self.endGame();
@@ -178,7 +200,7 @@ class JSGameController {
         this.playedOnce = true;
 
         // restart the game at key stroke
-        Lib.document.onkeypress = function(event : Event) : Void {
+        Lib.document.onkeydown = function(event : Event) : Void {
             self.view.clear();
             self.start();
             event.stopPropagation();
