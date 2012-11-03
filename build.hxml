@@ -2,3 +2,4 @@
 -js out/robotaxeskitten.js
 -main RobotAxesKitten
 -resource resources/nkis@nkis
+--dead-code-elimination
